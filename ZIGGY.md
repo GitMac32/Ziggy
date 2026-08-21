@@ -13,7 +13,24 @@ install -m 755 target/release/ziggy ~/.local/bin/ziggy
 ziggy --version
 ```
 
-Needs a Rust toolchain. First release build can take 15–35 minutes.
+Needs a Rust toolchain **and protobuf**. The build script runs `bin/protoc`, which is a
+[dotslash](https://dotslash-cli.com/) wrapper (not `/usr/bin/cargo`). On a fresh box:
+
+```bash
+# cargo lives here, not /usr/bin/cargo
+source "$HOME/.cargo/env"
+
+# repo's bin/protoc shebang is `#!/usr/bin/env dotslash`
+cargo install dotslash
+# alternatively: sudo apt install protobuf-compiler
+# (or any `protoc` on PATH — this machine used linuxbrew)
+
+cargo build -p xai-grok-pager-bin --release
+```
+
+First release build can take 15–35 minutes. If you see
+`/usr/bin/env: ‘dotslash’: No such file or directory` or
+`` `protoc` not found ``, install `dotslash` (or `protoc`) and retry.
 
 ## Run
 
